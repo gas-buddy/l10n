@@ -12,6 +12,8 @@ tap.test('test_app', async (t) => {
       en: {
         Yes: 'Yes',
         No: 'No',
+        // eslint-disable-next-line
+        Template: 'You said ${arg.toUpperCase()}',
         Colors: {
           Green: 'green',
         },
@@ -28,15 +30,28 @@ tap.test('test_app', async (t) => {
 
   app.get('/:string', (req, res) => {
     const string = req.l10n[req.params.string]('Default');
-    console.error("STER", string);
     res.json({ string });
   });
 
+  let { body } = await request(app).get('/Yes');
+  t.strictEquals(body.string, 'Yes', 'Should get default language string');
+
   app.get('/strings/green', (req, res) => {
-    res.send(req.l10n.Colors.Green('blue'));
+    res.json(req.l10n.Colors.Green('blue'));
   });
 
-  const{ body } = await request(app)
-    .get('/Yes');
-  t.strictEquals(body.string, 'Yes', 'Should get default language string');
+  ({ body } = await request(app).get('/strings/green'));
+  t.strictEquals(body, 'green', 'Should get explicit string over default');
+
+  ({ body } = await request(app)
+    .get('/strings/green')
+    .set('Accept-Language', 'de-CH'));
+  t.strictEquals(body, 'grün', 'Should get German string');
+
+  app.get('/strings/template', (req, res) => {
+    res.json(req.l10n.Template({ arg: req.query.arg }));
+  });
+
+  ({ body } = await request(app).get('/strings/template?arg=foo'));
+  t.strictEquals(body, 'You said FOO', 'Should get templated string');
 });

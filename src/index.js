@@ -22,7 +22,6 @@ export class L10N {
     this.inverted = {};
     Object.entries(strings).forEach(([culture, dict]) => {
       const compositeKeys = flatten(dict);
-      console.error('FLAT', compositeKeys);
       Object.entries(compositeKeys).forEach(([stringName, value]) => {
         this.inverted[stringName] = this.inverted[stringName] || {
           cultures: [],
@@ -33,7 +32,6 @@ export class L10N {
         detail.values[culture] = value;
       });
     });
-    context?.service?.on('request', req => this.attach(req));
   }
 
   attach(req) {
@@ -42,7 +40,7 @@ export class L10N {
 
   translate(req, stringKey, defaultTemplate, templateArguments) {
     const detail = this.inverted[stringKey];
-    let bestTemplate = defaultTemplate;
+    let bestTemplate = typeof defaultTemplate === 'string' ? defaultTemplate : null;
     if (detail) {
       const best = req.acceptsLanguages(detail.cultures);
       if (best && detail.values[best]) {
@@ -51,7 +49,11 @@ export class L10N {
         bestTemplate = detail.values[this.default];
       }
     }
-    return template(bestTemplate, templateArguments);
+    if (!bestTemplate) {
+      throw new Error(`Invalid l10n call for ${stringKey}`);
+    }
+    const args = (typeof defaultTemplate === 'object') ? defaultTemplate : templateArguments;
+    return template(bestTemplate, args);
   }
 }
 
