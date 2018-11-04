@@ -1,0 +1,9 @@
+test_output.log
+.idea
+node_modules
+build
+.wercker
+coverage
+.nyc_output
+npm-debug.log
+.tap_output
