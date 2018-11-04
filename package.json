@@ -17,9 +17,6 @@
     "type": "git",
     "url": "git+https://github.com/gas-buddy/l10n.git"
   },
-  "bin": {
-    "start-server": "build/start-server.js"
-  },
   "engines": {
     "node": ">=8.9"
   },
