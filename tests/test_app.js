@@ -10,6 +10,11 @@ tap.test('test_app', async (t) => {
     default: 'en',
     strings: {
       en: {
+        MyFavoriteColor: [
+          'Green',
+          'Red',
+          'Blue',
+        ],
         Yes: 'Yes',
         No: 'No',
         // eslint-disable-next-line
@@ -54,4 +59,17 @@ tap.test('test_app', async (t) => {
 
   ({ body } = await request(app).get('/strings/template?arg=foo'));
   t.strictEquals(body, 'You said FOO', 'Should get templated string');
+
+  app.get('/strings/MyFavoriteColor', (req, res) => {
+    res.json(req.l10n.MyFavoriteColor());
+  });
+
+  const observed = new Set();
+  for (let i = 0; i < 20; i += 1) {
+    // eslint-disable-next-line no-await-in-loop
+    ({ body } = await request(app).get('/strings/MyFavoriteColor'));
+    observed.add(body);
+    t.ok(['Green', 'Red', 'Blue'].includes(body), 'Should get one of the colors');
+  }
+  t.ok(observed.size > 1, 'Should not get the same value every time');
 });

@@ -1,7 +1,7 @@
 function recurse(result, currentKey, currentValue) {
   Object.entries(currentValue).forEach(([key, value]) => {
     const newCompositeKey = (currentKey && key) ? `${currentKey}.${key}` : (key || currentKey);
-    if (typeof value === 'string') {
+    if (typeof value === 'string' || Array.isArray(value)) {
       result[newCompositeKey] = value;
     } else {
       recurse(result, newCompositeKey, value);

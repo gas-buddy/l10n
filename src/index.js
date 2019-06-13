@@ -40,7 +40,7 @@ export class L10N {
 
   translate(req, stringKey, defaultTemplate, templateArguments) {
     const detail = this.inverted[stringKey];
-    let bestTemplate = typeof defaultTemplate === 'string' ? defaultTemplate : null;
+    let bestTemplate = (typeof defaultTemplate === 'string' || Array.isArray(defaultTemplate)) ? defaultTemplate : null;
     if (detail) {
       const best = req.acceptsLanguages(detail.cultures);
       if (best && detail.values[best]) {
@@ -51,6 +51,9 @@ export class L10N {
     }
     if (!bestTemplate) {
       throw new Error(`Invalid l10n call for ${stringKey}`);
+    }
+    if (Array.isArray(bestTemplate)) {
+      bestTemplate = bestTemplate[Math.floor(Math.random() * bestTemplate.length)];
     }
     const args = (typeof defaultTemplate === 'object') ? defaultTemplate : templateArguments;
     return template(bestTemplate, args);

@@ -48,3 +48,9 @@ use tagged templates because you lose the name-based parameter substitution).
 const firstName = req.query.firstName;
 req.l10n.Phrases.HelloName('Hello, ${firstName}', { firstName });
 ```
+
+Also, string values can be arrays, which will cause the library to pick one at random. This can be useful for varying responses in a speech environment, for example.
+
+```
+req.l10n.Colors.Green(['green', 'army green', 'lime']);
+```

@@ -1,11 +1,11 @@
 {
   "name": "@gasbuddy/l10n",
-  "version": "0.1.1",
+  "version": "0.3.0",
   "description": "A simple module for l10n in GasBuddy projects.",
   "main": "build/index.js",
   "scripts": {
     "test": "tap --node-arg=-r --node-arg=@babel/register tests/test_*.js",
-    "cover": "cross-env BABEL_ENV=test nyc tap tests/test_*.js && nyc check-coverage && nyc report --reporter=text",
+    "cover": "cross-env BABEL_ENV=test tap tests/test_*.js && nyc check-coverage && nyc report --reporter=text",
     "ci-test": "cross-env NODE_ENV=test nyc tap -Rtap tests/test_*.js | tee .tap_output | tap -Rspec -",
     "ci-cover": "nyc check-coverage",
     "ci-coveralls": "nyc report --reporter=text-lcov | coveralls",
@@ -46,7 +46,6 @@
       "@babel/register"
     ],
     "sourceMap": false,
-    "instrument": false,
     "reporter": [
       "lcov"
     ]
@@ -61,7 +60,7 @@
     "cross-env": "^5.2.0",
     "eslint-config-gasbuddy": "^5.3.0",
     "express": "^4.17.1",
-    "supertest": "^3.4.2",
-    "tap": "^12.7.0"
+    "supertest": "^4.0.2",
+    "tap": "^14.2.2"
   }
 }
