@@ -6,15 +6,11 @@ import l10n from '../src/index';
 tap.test('test_app', async (t) => {
   const app = express();
 
+  const germanColors = ['grün', 'rot', 'blau'];
   app.use(l10n({
     default: 'en',
     strings: {
       en: {
-        MyFavoriteColor: [
-          'Green',
-          'Red',
-          'Blue',
-        ],
         Yes: 'Yes',
         No: 'No',
         // eslint-disable-next-line
@@ -29,6 +25,7 @@ tap.test('test_app', async (t) => {
         Colors: {
           Green: 'grün',
         },
+        MyFavoriteColor: germanColors,
       },
     },
   }));
@@ -61,7 +58,7 @@ tap.test('test_app', async (t) => {
   t.strictEquals(body, 'You said FOO', 'Should get templated string');
 
   app.get('/strings/MyFavoriteColor', (req, res) => {
-    res.json(req.l10n.MyFavoriteColor());
+    res.json(req.l10n.MyFavoriteColor(['Green', 'Red', 'Blue']));
   });
 
   const observed = new Set();
@@ -72,4 +69,13 @@ tap.test('test_app', async (t) => {
     t.ok(['Green', 'Red', 'Blue'].includes(body), 'Should get one of the colors');
   }
   t.ok(observed.size > 1, 'Should not get the same value every time');
+
+  const observedDe = new Set();
+  for (let i = 0; i < 20; i += 1) {
+    // eslint-disable-next-line no-await-in-loop
+    ({ body } = await request(app).get('/strings/MyFavoriteColor').set('Accept-Language', 'de-CH'));
+    observedDe.add(body);
+    t.ok(germanColors.includes(body), 'Should get one of the colors');
+  }
+  t.ok(observedDe.size > 1, 'Should not get the same value every time');
 });

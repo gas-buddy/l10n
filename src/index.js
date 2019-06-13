@@ -42,7 +42,7 @@ export class L10N {
     const detail = this.inverted[stringKey];
     let bestTemplate = (typeof defaultTemplate === 'string' || Array.isArray(defaultTemplate)) ? defaultTemplate : null;
     if (detail) {
-      const best = req.acceptsLanguages(detail.cultures);
+      const best = req.headers['accept-language'] && req.acceptsLanguages(detail.cultures);
       if (best && detail.values[best]) {
         bestTemplate = detail.values[best];
       } else if (this.default && detail.values[this.default]) {

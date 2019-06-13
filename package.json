@@ -1,6 +1,6 @@
 {
   "name": "@gasbuddy/l10n",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A simple module for l10n in GasBuddy projects.",
   "main": "build/index.js",
   "scripts": {
