@@ -2,9 +2,9 @@
 ==============
 
 A simple l10n framework for Javascript projects with template support. General usage is modeled after iOS where
-you embed the "initial" version of your string directly in code but then it is transprently replaced by the l10n
+you embed the "initial" version of your string directly in code but then it is transparently replaced by the l10n
 infrastructure. Each string has a "key" and a default value, the key is used in the translation process to create
-a stable key for external translation (as opposed to using the default value). The module is meant to be used as middleware in any [express](https://github.com/expressjs/express)project and adds an "l10n" function to the req object. Future improvements will include React support and thus some client side support.
+a stable key for external translation (as opposed to using the default value). The module is meant to be used as middleware in any [express](https://github.com/expressjs/express) project and adds an "l10n" function to the req object. Future improvements will include React support and thus some client side support.
 
 See the [test](tests/test_app.js) for simple usage, but generally there are two phases, string table setup and usage.
 
@@ -40,7 +40,7 @@ req.l10n.Colors.Green('green')
 req.l10n['Colors.Green']('green')
 ```
 
-Strings support the full ES6 template string system using [es6-template-strings](https://github.com/medikoo/es6-template-strings). Please not you should NOT
+Strings support the full ES6 template string system using [es6-template-strings](https://github.com/medikoo/es6-template-strings). Please note you should NOT
 use the backticks otherwise the substitutions happen at the wrong time (We didn't
 use tagged templates because you lose the name-based parameter substitution).
 
